@@ -30,6 +30,7 @@
     <textarea placeholder="Write your book"></textarea><br />
     <input type="number" placeholder="Characters per page" /><br /><br />
     <button id="turnPage">Turn Page</button>
+    <button id="turnPageBack">Turn Page Back</button>
     <p id="bookPage"></p>
   </section>
   <!-- widgets end -->
@@ -60,18 +61,23 @@
       constructor(...ints) {
         this.ints = ints
       }
+
       getAll() {
         return this.ints
       }
+
       getEvens() {
         return this.ints.filter(n => n % 2 === 0)
       }
+
       getNegatives() {
         return this.ints.filter(n => n < 0)
       }
+
       getAllSquared() {
         return this.ints.map(n => n ** 2)
       }
+
       pop() {
         return this.ints.pop()
         // I don not get here why this is the correct solution. The output is wrong.
@@ -86,6 +92,7 @@
         this.ints.push(int);
         return this.ints;
       }
+
       getEveryNth(n) {
         const result = [];
         for (let i = 0; i < this.ints.length; i += n) {
@@ -94,6 +101,7 @@
         return result;
         // seems better I just do not get it: return this.ints.filter((_, index) => index % n === 0); // this part: (_, index)
       }
+
       getAllReversed() {
         // my first solution
         /*
@@ -140,11 +148,11 @@
             : `${this.reloaded} projectiles left!`);
       }
 
-        toggleSafety() {
-          this.safetyOn = !this.safetyOn
-          return this.safetyOn ? "Safety enabled!" : "Safety disabled!"
-        }
+      toggleSafety() {
+        this.safetyOn = !this.safetyOn
+        return this.safetyOn ? "Safety enabled!" : "Safety disabled!"
       }
+    }
 
     // this part was insanely hard to figure out!!!
 
@@ -164,9 +172,34 @@
       //    ebook.next() // returns null
       // 🌟 HINT: remember about the `slice` method which strings and arrays have
       // ❗ Feel free to implement `back`, although this is not required nor graded
+      constructor(str, charsOfAPage) {
+        this.str = str
+        this.charsOfAPage = charsOfAPage
+        this.currentPage = 0
+        this.previousPages = []
+      }
 
+      next() {
+        let start = this.currentPage * this.charsOfAPage
+        let end = start + this.charsOfAPage
+        let nextPage = this.str.slice(start, end)
+        if (nextPage.length === 0) {
+          return null
+        }
+        this.previousPages.push(nextPage)
+        this.currentPage++
+        return nextPage
+      }
+
+      back() {
+        if (this.currentPage === 0) {
+          return null
+        }
+        this.currentPage--
+        return this.previousPages.pop()
+      }
     }
-
+    
     // 👉 CHALLENGE 4 AntFarm
     class AntFarm {
       // 🧠 Constructor takes **any** number of arguments, which are strings: the names of your ants
@@ -491,6 +524,9 @@
       getNumberInput().oninput = updateBook
       turnPage.onclick = () => {
         bookPage.textContent = book.next() || 'The End'
+      }
+      turnPageBack.onclick = () => {
+        bookPage.textContent = book.back() || 'The Start'
       }
     } catch (err) { console.error(err.stack) }
   </script>
