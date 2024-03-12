@@ -122,8 +122,31 @@
       //      * When engaging the safety, return "Safety enabled!"
       //      * When disengaging the safety, return "Safety disabled!"
       // 🌟 HINT: instances need to keep track of their maximum capacity as well as their current capacity
+      constructor(ammo) {
+        this.ammo = ammo
+        this.reloaded = ammo
+        this.safetyOn = true
+      }
 
-    }
+      shoot() {
+        return this.reloaded > 0 && !this.safetyOn ? (--this.reloaded, "Bang!") : "Click!"
+      }
+
+      reload(number) {
+        return (typeof number !== 'number' || number < 1)
+          ? "Error reloading!"
+          : ((this.reloaded += number) > this.ammo
+            ? ((this.reloaded = this.ammo), `${this.reloaded} projectiles left!`)
+            : `${this.reloaded} projectiles left!`);
+      }
+
+        toggleSafety() {
+          this.safetyOn = !this.safetyOn
+          return this.safetyOn ? "Safety enabled!" : "Safety disabled!"
+        }
+      }
+
+    // this part was insanely hard to figure out!!!
 
     // 👉 CHALLENGE 3 EBook
     class EBook {
