@@ -199,7 +199,7 @@
         return this.previousPages.pop()
       }
     }
-    
+
     // 👉 CHALLENGE 4 AntFarm
     class AntFarm {
       // 🧠 Constructor takes **any** number of arguments, which are strings: the names of your ants
@@ -232,8 +232,37 @@
       //      console.log(list) // prints ["a"]
       // 👉 HINT: if you are not feeling confident with map and filter, solve the problem with for loops,
       //      and with the piece of mind of all tests passing, refactor to use map/filter
+      constructor(...antNames) {
+        this.ants = antNames.map(name => ({
+          name: name,
+          health: 100
+        }))
+      }
+      
+      work() {
+        let startingAnts = this.ants.length
+        if (startingAnts === 0) {
+          return "No ants here. Did you work them to death?"
+        }
+        this.ants.forEach(ant => ant.health -= 20)
+        this.ants = this.ants.filter(ant => ant.health > 0)
+        return `${startingAnts} ants starting work!`
+      }
 
+      feed(antName) {
+        let antFound = false
+        this.ants = this.ants.map(ant => {
+          if (ant.name === antName) {
+            antFound = true
+            return { ...ant, health: ant.health + 15 }
+          }
+          return ant
+        })
+        return antFound ? 'Yum!' : `${antName} not found!`
+      }
     }
+    const farm = new AntFarm('Jess', 'Blake');
+    console.log(farm.work())
 
     // 🧪 TESTS, do not make any changes below this line ===================
     // 🧪 TESTS, do not make any changes below this line ===================
